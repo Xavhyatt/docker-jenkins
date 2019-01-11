@@ -7,7 +7,7 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>https://github.com/bob-crutchley/spring-boot-hello-world</url>
+        <url>https://github.com/Xavhyatt/spring-boot-hello-world</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
@@ -33,28 +33,15 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash
-# download from git
-project=&quot;spring-boot-hello-world&quot;
-port=9000
-docker=&quot;sudo docker&quot;
-# check for running container
-if $docker ps | grep $project; then
-        $docker stop $project
-fi
-# check for stopped container
-if $docker ps -a | grep $project; then
-        $docker rm $project
-fi
-# check for image
-if $docker images | grep $project; then 
-        $docker rmi $project
-fi
-# compile code
-mvn clean package
-# create docker image
-$docker build -t $project .
-# run docker image
-$docker run -d -p $port:8080 --name $project $project</command>
+        mvn clean package
+        sudo docker build -t spring-boot-hello-world:latest .
+        if sudo docker ps -a | grep spring1
+          then
+          sudo docker stop spring1
+          sudo docker rm spring1
+        fi
+        sudo docker rmi $(docker images -q -f dangling=true)
+        sudo docker run -d -p 9000:9000 --name spring1 spring-boot-hello-world</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
